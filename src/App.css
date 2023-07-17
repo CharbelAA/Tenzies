@@ -1,0 +1,58 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  --hightlight-color: #59e391;
+  --main-text-color: #2b283a;
+  --text-color: #4a4e74;
+  --button-color: #5035ff;
+}
+
+.gameboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.instructions {
+  width: 300px;
+}
+.container {
+  display: flex;
+  width: 511px;
+  height: 300px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-content: center;
+  gap: 2%;
+  border-radius: 10px;
+}
+
+.dice {
+  flex-basis: calc(20% - 20px);
+  aspect-ratio: 1/1;
+  font-size: large;
+  font-weight: 700;
+  color: #2b283a;
+  border-radius: 10px;
+  margin-top: 5%;
+}
+
+.unlocked {
+  background-color: white;
+}
+
+.locked {
+  background-color: var(--hightlight-color);
+}
+.roll {
+  background-color: #5035ff;
+  font-size: x-large;
+  color: white;
+  padding: 10px 35px;
+}
