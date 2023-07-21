@@ -18,7 +18,7 @@ function App() {
       />
     );
   });
-
+  //I am improving this code.
   function rollDice() {
     !gameState && setGameState(true);
     const newDice = diceValues.map(() => {
