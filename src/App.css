@@ -43,13 +43,6 @@
   margin-top: 5%;
 }
 
-.unlocked {
-  background-color: white;
-}
-
-.locked {
-  background-color: var(--hightlight-color);
-}
 .roll {
   background-color: #5035ff;
   font-size: x-large;

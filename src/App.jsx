@@ -3,52 +3,70 @@ import "./App.css";
 import Dice from "./components/Dice";
 
 function App() {
-  const [diceValues, setDiceValues] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-  const [lockedItems, setLockedItems] = useState([]);
-  const [win, setWin] = useState(false);
-  const [gameState, setGameState] = useState(false);
+  // ** Initialize my app START
+  const getRandomValue = (min, max) => {
+    return Math.floor(Math.random() * (max - min) + min);
+  };
+  const generateUniqueId = () => {
+    return Math.random().toString(36).substr(2, 9); // You can use a more robust method for generating unique IDs
+  };
+  const initialDiceArray = Array.from({ length: 10 }, () => ({
+    value: getRandomValue(1, 7), // Random value between 1 and 6 (inclusive)
+    isHeld: false,
+    id: generateUniqueId(),
+  }));
 
-  const diceComponents = diceValues.map((value, index) => {
+  const [dice, setDice] = useState(initialDiceArray);
+
+  // ** Initialize my app END
+
+  // ** Dice Manipulation functions START
+  function rollDice() {
+    setDice((prevDice) => {
+      const updatedDice = prevDice.map((die) => {
+        if (!die.isHeld) {
+          return {
+            ...die,
+            value: Math.floor(Math.random() * 6) + 1,
+          };
+        }
+        return die; // If isHeld is true, keep the die object unchanged
+      });
+
+      return updatedDice;
+    });
+  }
+
+  function hold(id) {
+    setDice((prevDice) => {
+      const newHeldDice = prevDice.map((die) => {
+        if (id == die.id) {
+          return {
+            ...die,
+            isHeld: !die.isHeld,
+          };
+        } else {
+          return die;
+        }
+      });
+      return newHeldDice;
+    });
+  }
+
+  // ** Dice Manipulation functions END
+
+  const diceComponents = dice.map((dice, index) => {
     return (
       <Dice
         key={index}
-        value={value}
-        setLockedItems={setLockedItems}
-        gameState={gameState}
+        id={dice.id}
+        value={dice.value}
+        isHeld={dice.isHeld}
+        hold={hold}
       />
     );
   });
-  //I am improving this code.
-  function rollDice() {
-    !gameState && setGameState(true);
-    const newDice = diceValues.map(() => {
-      return Math.floor(Math.random() * 6) + 1;
-    });
 
-    setDiceValues(newDice);
-  }
-
-  useEffect(() => {
-    function checkWin() {
-      const uniqueArray = [...new Set(lockedItems)];
-      if (lockedItems.length == 10 && uniqueArray.length == 1) {
-        setWin(true);
-      }
-    }
-
-    gameState && checkWin();
-  }, [lockedItems, setWin, gameState]);
-
-  function resetGame() {
-    setWin(false);
-    setLockedItems([]);
-    setDiceValues([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    setGameState(false);
-
-    //need to do a force reset - feed the dice component a function that does the oposite of the existing state
-  }
-
-  console.log("app rendered");
   return (
     <div className="gameboard">
       <h1>Tenzies</h1>
@@ -57,8 +75,8 @@ function App() {
         current value between rolls.
       </p>
       <div className="container">{diceComponents}</div>
-      <button className="roll" onClick={win ? resetGame : rollDice}>
-        {win ? "You won!" : "Roll"}
+      <button className="roll" onClick={rollDice}>
+        Roll
       </button>
     </div>
   );
