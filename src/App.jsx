@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Dice from "./components/Dice";
 
@@ -17,10 +17,12 @@ function App() {
   }));
 
   const [dice, setDice] = useState(initialDiceArray);
+  const [gameIsActive, setGameIsActive] = useState(true);
 
   // ** Initialize my app END
 
   // ** Dice Manipulation functions START
+
   function rollDice() {
     setDice((prevDice) => {
       const updatedDice = prevDice.map((die) => {
@@ -53,7 +55,25 @@ function App() {
     });
   }
 
+  function resetGame() {
+    setDice(initialDiceArray);
+    setGameIsActive(true);
+  }
+
   // ** Dice Manipulation functions END
+
+  useEffect(() => {
+    function checkWin() {
+      const heldDice = dice.filter((die) => die.isHeld);
+      const heldDiceValues = heldDice.map((die) => die.value);
+      const heldIdenticalDice = [...new Set(heldDiceValues)]; //I'm checking if the dice objects are all identical.Minus id field.
+      if ((heldIdenticalDice.length == 1) & (heldDiceValues.length == 10)) {
+        setGameIsActive(false);
+      }
+    }
+
+    checkWin();
+  }, [dice]);
 
   const diceComponents = dice.map((dice, index) => {
     return (
@@ -75,9 +95,16 @@ function App() {
         current value between rolls.
       </p>
       <div className="container">{diceComponents}</div>
-      <button className="roll" onClick={rollDice}>
-        Roll
-      </button>
+
+      {gameIsActive ? (
+        <button className="roll" onClick={rollDice}>
+          Roll
+        </button>
+      ) : (
+        <button className="roll" onClick={resetGame}>
+          Reset Game
+        </button>
+      )}
     </div>
   );
 }
