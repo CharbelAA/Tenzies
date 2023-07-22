@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
 import "./App.css";
 import Dice from "./components/Dice";
 
@@ -89,6 +90,7 @@ function App() {
 
   return (
     <div className="gameboard">
+      {!gameIsActive && <Confetti className="confetti" />}
       <h1>Tenzies</h1>
       <p className="instructions">
         Roll until all dice are the same. Click each die to freeze it at its
